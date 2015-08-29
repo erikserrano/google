@@ -1,2 +1,2 @@
 # google
-Repositorio encargado de almacenar código encargado de manejar procesos de Google
+Repositorio encargado de almacenar código para consumir recursos de Google
