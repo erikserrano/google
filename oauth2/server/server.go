@@ -1,8 +1,5 @@
-/*
-* Get Google Token by Code
-* Documentation: https://developers.google.com/accounts/docs/OAuth2WebServer
- */
-
+// Paquete encargado de obtener un token de Google en base a un código de autorización
+// Documentación: https://developers.google.com/accounts/docs/OAuth2WebServer 
 package server
 
 import (
@@ -17,6 +14,7 @@ const (
 	GRANT_TYPE       = "authorization_code"
 )
 
+// Función encargada de solicitar token
 func getToken(code, clientId, clientSecret, redirectUri string, oauth *OAuth2WebServer) error {
 	resp, err := http.PostForm(
 		GOOGLE_API_OAUTH,
@@ -47,6 +45,7 @@ func getToken(code, clientId, clientSecret, redirectUri string, oauth *OAuth2Web
 	return nil
 }
 
+// Función encargada de solicitar token
 func GetToken(code, clientId, clientSecret, redirectUri string) (*OAuth2WebServer, error) {
 	oauth := &OAuth2WebServer{}
 	err := getToken(code, clientId, clientSecret, redirectUri, oauth)

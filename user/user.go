@@ -1,8 +1,5 @@
-/*
-* Google User Information
-* Documentation: https://developers.google.com/accounts/docs/OAuth2
- */
-
+// Paquete encargado de obtener la información de un usuario en base a un token
+// Documentación: https://developers.google.com/accounts/docs/OAuth2
 package user
 
 import (
@@ -11,8 +8,12 @@ import (
 	"net/http"
 )
 
-const GOOGLE_API_OAUTH = "https://www.googleapis.com/oauth2/v2/userinfo"
+const (
+	GOOGLE_API_OAUTH = "https://www.googleapis.com/oauth2/v2/userinfo"
+)
 
+// Función encargada de consultar los servicios de Google
+// y obtener la información del usuario
 func getUserInfo(token string, user *User) error {
 	res, err := http.Get(GOOGLE_API_OAUTH + "?alt=json&access_token=" + token)
 	if err != nil {
@@ -33,6 +34,7 @@ func getUserInfo(token string, user *User) error {
 	return nil
 }
 
+// Función encargada de consultar la información del usuario en base a un token
 func GetUser(token string) (*User, error) {
 	googleUser := &User{Token: token}
 	err := getUserInfo(token, googleUser)
