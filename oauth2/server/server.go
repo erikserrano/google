@@ -15,7 +15,7 @@ const (
 )
 
 // Función encargada de solicitar token
-func getToken(code, clientId, clientSecret, redirectUri string, oauth *OAuth2WebServer) error {
+func getToken(code, clientId, clientSecret, redirectUri string, reciver interface{}) error {
 	resp, err := http.PostForm(
 		GOOGLE_API_OAUTH,
 		url.Values{
@@ -36,7 +36,7 @@ func getToken(code, clientId, clientSecret, redirectUri string, oauth *OAuth2Web
 		return err
 	}
 
-	err = json.Unmarshal(body, &oauth.JsonResponse)
+	err = json.Unmarshal(body, reciver)
 	if err != nil {
 		return err
 	}
