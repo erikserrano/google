@@ -1,4 +1,4 @@
-// Package user requests for user information to Google API
+// Package user enable get google user information
 // Documentation: https://developers.google.com/accounts/docs/OAuth2
 package user
 
@@ -13,9 +13,7 @@ const (
 	GoogleAPIOauth = "https://www.googleapis.com/oauth2/v2/userinfo"
 )
 
-// Función encargada de consultar los servicios de Google
-// y obtener la información del usuario
-// getUserInfo request
+// geUserInfo makes http request to Google API
 func getUserInfo(token string, reciver interface{}) error {
 	res, err := http.Get(GoogleAPIOauth + "?alt=json&access_token=" + token)
 	if err != nil {
@@ -36,7 +34,7 @@ func getUserInfo(token string, reciver interface{}) error {
 	return nil
 }
 
-// Función encargada de consultar la información del usuario en base a un token
+// GetUser requests to Google API for user information
 func GetUser(token string) (*User, error) {
 	googleUser := &User{Token: token}
 	err := getUserInfo(token, googleUser)
