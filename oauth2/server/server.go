@@ -1,9 +1,9 @@
 // Paquete encargado de obtener un token de Google en base a un código de autorización
-// Documentación: https://developers.google.com/accounts/docs/OAuth2WebServer 
+// Documentación: https://developers.google.com/accounts/docs/OAuth2WebServer
 package server
 
 import (
-    "encoding/json"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"net/url"
