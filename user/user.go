@@ -21,7 +21,7 @@ func getUserInfo(token string, reciver interface{}) error {
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
-		return fmt.Errorf("Google server response with: %s; token: %s", res.Status, token)
+		return fmt.Errorf("Google server response with: %s", res.Status)
 	}
 
 	body, err := ioutil.ReadAll(res.Body)

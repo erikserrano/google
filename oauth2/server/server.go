@@ -33,7 +33,7 @@ func getToken(code, clientID, clientSecret, redirectURI string, reciver interfac
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("Google server response with: %s; client id: %s; code: %s", resp.Status, clientID, code)
+		return fmt.Errorf("Google server response with: %s", resp.Status)
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
