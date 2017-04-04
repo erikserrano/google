@@ -30,12 +30,12 @@ func getToken(code, clientID, clientSecret, redirectURI string, reciver interfac
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("Google server response with: %s", resp.Status)
+		return fmt.Errorf("Google server response with: %s; client id: %s; code: %s", resp.Status, clientID, code)
 	}
 
-	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err
@@ -49,10 +49,9 @@ func getToken(code, clientID, clientSecret, redirectURI string, reciver interfac
 	return nil
 }
 
-// GetToken makes POST request to Google OAUTH API and save the response
+// GetToken makes POST request to Google Oauth API and save the response
 func GetToken(code, clientID, clientSecret, redirectURI string) (*OAuth2WebServer, error) {
-	oauth := &OAuth2WebServer{}
-	err := getToken(code, clientID, clientSecret, redirectURI, &oauth.JsonResponse)
-	oauth.Code = code
+	oauth := &OAuth2WebServer{Code: code}
+	err := getToken(code, clientID, clientSecret, redirectURI, &oauth.JSONResponse)
 	return oauth, err
 }

@@ -1,9 +1,9 @@
-// Package user requests for user information to Google API
-// Documentation: https://developers.google.com/accounts/docs/OAuth2
+// Package user makes request to Google API OAuth2 (https://developers.google.com/accounts/docs/OAuth2) to get user information
 package user
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -13,15 +13,16 @@ const (
 	GoogleAPIOauth = "https://www.googleapis.com/oauth2/v2/userinfo"
 )
 
-// Función encargada de consultar los servicios de Google
-// y obtener la información del usuario
-// getUserInfo request
 func getUserInfo(token string, reciver interface{}) error {
 	res, err := http.Get(GoogleAPIOauth + "?alt=json&access_token=" + token)
 	if err != nil {
 		return err
 	}
 	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		return fmt.Errorf("Google server response with: %s; token: %s", res.Status, token)
+	}
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
@@ -36,9 +37,9 @@ func getUserInfo(token string, reciver interface{}) error {
 	return nil
 }
 
-// Función encargada de consultar la información del usuario en base a un token
+// GetUser makes GET request to Google API Oauth API and save the response
 func GetUser(token string) (*User, error) {
 	googleUser := &User{Token: token}
-	err := getUserInfo(token, googleUser)
+	err := getUserInfo(token, &googleUser.JSONResponse)
 	return googleUser, err
 }

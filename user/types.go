@@ -1,17 +1,16 @@
-// Paquete encargado de obtener la información de un usuario en base a un token
-// Documentación: https://developers.google.com/accounts/docs/OAuth2
+// Package user makes request to Google API OAuth2 (https://developers.google.com/accounts/docs/OAuth2) to get user information
 package user
 
-// Estructura encargada de representar la respuesta de Google
+// User represents the Google response
 type User struct {
-    Token        string
-	JsonResponse map[string]interface{}
+	Token        string
+	JSONResponse map[string]interface{}
 }
 
-// Método encargado de consultar una propiedad en la respuesta de Google
+// QueryProperty queries properties in the response
 func (googleUser *User) QueryProperty(property string) interface{} {
-	if len(googleUser.JsonResponse) > 0 {
-		if val, ok := googleUser.JsonResponse[property]; ok == true {
+	if len(googleUser.JSONResponse) > 0 {
+		if val, ok := googleUser.JSONResponse[property]; ok == true {
 			return val
 		}
 	}
