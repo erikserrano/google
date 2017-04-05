@@ -1,35 +1,40 @@
-// Paquete encargado de obtener un token de Google en base a un código de autorización
-// Documentación: https://developers.google.com/accounts/docs/OAuth2WebServer
+// Package server makes request to Google API Oauth (https://developers.google.com/accounts/docs/OAuth2WebServer)
 package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 )
 
 const (
-	GOOGLE_API_OAUTH = "https://www.googleapis.com/oauth2/v4/token"
-	GRANT_TYPE       = "authorization_code"
+	// GoogleAPIOauth holds URL for make request
+	GoogleAPIOauth = "https://www.googleapis.com/oauth2/v4/token"
+	// GrantType holds the type of request value sends
+	GrantType = "authorization_code"
 )
 
-// Función encargada de solicitar token
-func getToken(code, clientId, clientSecret, redirectUri string, reciver *OAuth2WebServer) error {
+func getToken(code, clientID, clientSecret, redirectURI string, reciver interface{}) error {
 	resp, err := http.PostForm(
-		GOOGLE_API_OAUTH,
+		GoogleAPIOauth,
 		url.Values{
 			"code":          {code},
-			"client_id":     {clientId},
+			"client_id":     {clientID},
 			"client_secret": {clientSecret},
-			"redirect_uri":  {redirectUri},
-			"grant_type":    {GRANT_TYPE},
+			"redirect_uri":  {redirectURI},
+			"grant_type":    {GrantType},
 		},
 	)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("Google server response with: %s", resp.Status)
+	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -40,14 +45,13 @@ func getToken(code, clientId, clientSecret, redirectUri string, reciver *OAuth2W
 	if err != nil {
 		return err
 	}
-	reciver.Code = code
 
 	return nil
 }
 
-// Función encargada de solicitar token
-func GetToken(code, clientId, clientSecret, redirectUri string) (*OAuth2WebServer, error) {
-	oauth := &OAuth2WebServer{}
-	err := getToken(code, clientId, clientSecret, redirectUri, oauth)
+// GetToken makes POST request to Google Oauth API and save the response
+func GetToken(code, clientID, clientSecret, redirectURI string) (*OAuth2WebServer, error) {
+	oauth := &OAuth2WebServer{Code: code}
+	err := getToken(code, clientID, clientSecret, redirectURI, &oauth.JSONResponse)
 	return oauth, err
 }
